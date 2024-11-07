@@ -18,7 +18,7 @@
 <body>
   <h1>Arbre de Décision - Journée sans Mail</h1>
   <div id="decision-tree" class="question-box">
-    <p id="question-text" class="question"><img src="alarme.png" class="icon" alt="Urgence"> As-tu vraiment besoin d’envoyer un email ?</p>
+    <p id="question-text" class="question"><img src="e-mail.png" class="icon" alt="Email"> As-tu vraiment besoin d’envoyer un email ?</p>
     <button class="button" onclick="nextStep('yes')">Oui, j’en suis convaincu</button>
     <button class="button" onclick="nextStep('no')">Non, explorons d’autres options</button>
     <img src="logo.png" alt="Logo Conseil Départemental" class="logo">
@@ -45,7 +45,7 @@
           if (answer === "Oui, réponse rapide souhaitée") {
             showFinalMessage("Utilisez un message instantané pour une réponse rapide.");
           } else {
-            document.getElementById("question-text").innerHTML = `<img src="e-mail.png" class="icon" alt="Traçabilité"> <strong>Est-ce important de garder une trace écrite de cet échange ?</strong>`;
+            document.getElementById("question-text").innerHTML = `<img src="esquisse-de-direction-des-empreintes.png" class="icon" alt="Traçabilité"> <strong>Est-ce important de garder une trace écrite de cet échange ?</strong>`;
             currentStep = "traceability";
             updateButtons(["Oui, besoin de traçabilité", "Non, pas besoin de trace"]);
           }
@@ -134,7 +134,7 @@
     function reset() {
       currentStep = "start";
       document.getElementById("decision-tree").innerHTML = `
-        <p id="question-text" class="question"><img src="alarme.png" class="icon" alt="Urgence"> As-tu vraiment besoin d’envoyer un email ?</p>
+        <p id="question-text" class="question"><img src="e-mail.png" class="icon" alt="Email"> As-tu vraiment besoin d’envoyer un email ?</p>
         <button class="button" onclick="nextStep('yes')">Oui, j’en suis convaincu</button>
         <button class="button" onclick="nextStep('no')">Non, explorons d’autres options</button>
         <img src="logo.png" alt="Logo Conseil Départemental" class="logo">
