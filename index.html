@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arbre de Décision - Journée sans Mail</title>
+  <style>
+    body { background-color: #ffcd00; color: #000000; font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+    .question-box { padding: 20px; margin: 20px auto; border-radius: 12px; background-color: #ffffff; width: 80%; max-width: 600px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); position: relative; }
+    .question { font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .button { margin: 10px; padding: 12px 24px; background-color: #ffcd00; color: #000000; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; }
+    .button:hover { background-color: #e6b800; }
+    .button:active { background-color: #cc9f00; }
+    .logo { margin-top: 20px; display: block; width: 150px; margin-left: auto; margin-right: auto; }
+    .icon { width: 24px; height: 24px; }
+  </style>
+</head>
+<body>
+  <h1>Arbre de Décision - Journée sans Mail</h1>
+  <div id="decision-tree" class="question-box">
+    <p id="question-text" class="question"><img src="alarme.png" class="icon" alt="Urgence"> As-tu vraiment besoin d’envoyer un email ?</p>
+    <button class="button" onclick="nextStep('yes')">Oui, j’en suis convaincu</button>
+    <button class="button" onclick="nextStep('no')">Non, explorons d’autres options</button>
+    <img src="logo.png" alt="Logo Conseil Départemental" class="logo">
+  </div>
+
+  <script>
+    let currentStep = "start";
+
+    function nextStep(answer) {
+      switch (currentStep) {
+        case "start":
+          if (answer === "yes") {
+            document.getElementById("question-text").innerHTML = `<img src="reactivite.png" class="icon" alt="Rapidité"> <strong>Ton email nécessite-t-il une réponse rapide ?</strong>`;
+            currentStep = "responseTime";
+            updateButtons(["Oui, réponse rapide souhaitée", "Non, pas de réponse immédiate attendue"]);
+          } else {
+            document.getElementById("question-text").innerHTML = `<img src="reactivite.png" class="icon" alt="Urgence"> <strong>Ton message est-il urgent ou peut-il attendre un peu ?</strong>`;
+            currentStep = "urgent";
+            updateButtons(["C'est urgent", "Ça peut attendre"]);
+          }
+          break;
+
+        case "responseTime":
+          if (answer === "Oui, réponse rapide souhaitée") {
+            showFinalMessage("Utilisez un message instantané pour une réponse rapide.");
+          } else {
+            document.getElementById("question-text").innerHTML = `<img src="e-mail.png" class="icon" alt="Traçabilité"> <strong>Est-ce important de garder une trace écrite de cet échange ?</strong>`;
+            currentStep = "traceability";
+            updateButtons(["Oui, besoin de traçabilité", "Non, pas besoin de trace"]);
+          }
+          break;
+
+        case "urgent":
+          if (answer === "C'est urgent") {
+            document.getElementById("question-text").innerHTML = `<img src="reactivite.png" class="icon" alt="Rapidité"> <strong>As-tu besoin d’une réponse immédiate ?</strong>`;
+            currentStep = "immediacy";
+            updateButtons(["Oui, c’est urgent", "Non, je peux attendre un peu"]);
+          } else {
+            document.getElementById("question-text").innerHTML = `<img src="presentation.png" class="icon" alt="Complexité"> <strong>Ton message nécessite-t-il des explications détaillées ?</strong>`;
+            currentStep = "clarity";
+            updateButtons(["Oui, c'est un peu complexe", "Non, c'est simple"]);
+          }
+          break;
+
+        case "clarity":
+          if (answer === "Oui, c'est un peu complexe") {
+            showFinalMessage("Utilisez un document partagé ou un email structuré.");
+          } else {
+            document.getElementById("question-text").innerHTML = `<img src="face-a-face.png" class="icon" alt="Face à face"> <strong>Discuter en face à face ne serait-il pas plus pertinent ?</strong>`;
+            currentStep = "inPerson";
+            updateButtons(["Oui, c'est plus pertinent", "Non, un message écrit suffit"]);
+          }
+          break;
+
+        case "traceability":
+          if (answer === "Oui, besoin de traçabilité") {
+            showFinalMessage("Envoyez un email pour garder une trace.");
+          } else {
+            document.getElementById("question-text").innerHTML = `<img src="audiences.png" class="icon" alt="Audience"> <strong>Ce message concerne-t-il plusieurs personnes ou juste une seule personne ?</strong>`;
+            currentStep = "audience";
+            updateButtons(["Plusieurs personnes", "Une seule personne"]);
+          }
+          break;
+
+        case "immediacy":
+          if (answer === "Oui, c’est urgent") {
+            showFinalMessage("Utilisez un message instantané pour une réponse rapide.");
+          } else {
+            document.getElementById("question-text").innerHTML = `<img src="presentation.png" class="icon" alt="Discussion"> <strong>C’est juste un échange ponctuel ou une discussion continue ?</strong>`;
+            currentStep = "frequency";
+            updateButtons(["Échange ponctuel", "Discussion continue"]);
+          }
+          break;
+
+        case "audience":
+          if (answer === "Plusieurs personnes") {
+            showFinalMessage("Organisez une réunion Teams ou envoyez un message de groupe.");
+          } else {
+            showFinalMessage("Un message privé suffit.");
+          }
+          break;
+
+        case "frequency":
+          if (answer === "Échange ponctuel") {
+            showFinalMessage("Un email ou un message instantané suffit.");
+          } else {
+            showFinalMessage("Utilisez un canal de messagerie pour une discussion continue.");
+          }
+          break;
+
+        case "inPerson":
+          if (answer === "Oui, c'est plus pertinent") {
+            showFinalMessage("Privilégiez un échange en face à face.");
+          } else {
+            showFinalMessage("Un message écrit sur Teams suffira.");
+          }
+          break;
+      }
+    }
+
+    function showFinalMessage(message) {
+      document.getElementById("question-text").innerHTML = message;
+      document.querySelectorAll('.button').forEach(button => button.remove());
+      document.getElementById("decision-tree").innerHTML += "<button class='button' onclick='reset()'>Recommencer</button>";
+    }
+
+    function updateButtons(options) {
+      let buttons = document.querySelectorAll('.button');
+      buttons[0].innerText = options[0];
+      buttons[1].innerText = options[1];
+    }
+
+    function reset() {
+      currentStep = "start";
+      document.getElementById("decision-tree").innerHTML = `
+        <p id="question-text" class="question"><img src="alarme.png" class="icon" alt="Urgence"> As-tu vraiment besoin d’envoyer un email ?</p>
+        <button class="button" onclick="nextStep('yes')">Oui, j’en suis convaincu</button>
+        <button class="button" onclick="nextStep('no')">Non, explorons d’autres options</button>
+        <img src="logo.png" alt="Logo Conseil Départemental" class="logo">
+      `;
+    }
+  </script>
+</body>
+</html>
